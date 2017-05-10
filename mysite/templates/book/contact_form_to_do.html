@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+{#定制Form设计#}
+{#在上面的`` contact_form.html`` 模板中我们使用`` {{form.as_table}}`` 显示表单，不过我们可以使用其他更精确控制表单显示的方法。#}
+{#修改form的显示的最快捷的方式是使用CSS。 尤其是错误列表，可以增强视觉效果。自动生成的错误列表精确的使用`` <ul class=”errorlist”>``，#}
+{#    这样，我们就可以针对它们使用CSS。 下面的CSS让错误更加醒目了：#}
+<style type="text/css">
+    ul.errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        background-color: red;
+        color: white;
+        display: block;
+        font-size: 10px;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+    }
+</style>
+{#虽然，自动生成HTML是很方便的，但是在某些时候，你会想覆盖默认的显示。 {{form.as_table}}和其它的方法在开发的时候是一个快捷的方式，form的显示方式也可以在form中被方便地重写。#}
+{#每一个字段部件(<input type=”text”>, <select>, <textarea>, 或者类似)都可以通过访问{{form.字段名}}进行单独的渲染。#}
+<html>
+<head>
+    <title>Contact us</title>
+</head>
+<body>
+    <h1>Contact us</h1>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form action="" method="post">
+        <div class="field">
+            {{ form.subject.errors }}
+            <label for="id_subject">Subject:</label>
+            {{ form.subject }}
+        </div>
+        <div class="field">
+            {{ form.email.errors }}
+            <label for="id_email">Your e-mail address:</label>
+            {{ form.email }}
+        </div>
+        <div class="field">
+            {{ form.message.errors }}
+            <label for="id_message">Message:</label>
+            {{ form.message }}
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+{#{{ form.message.errors }} 会在 <ul class="errorlist"> 里面显示，如果字段是合法的，或者form没有被绑定，就显示一个空字符串。 我们还可以把 form.message.errors 当作一个布尔值或者当它是list在上面做迭代， 例如：#}
+{#<div class="field{% if form.message.errors %} errors{% endif %}">#}
+{#    {% if form.message.errors %}#}
+{#        <ul>#}
+{#        {% for error in form.message.errors %}#}
+{#            <li><strong>{{ error }}</strong></li>#}
+{#        {% endfor %}#}
+{#        </ul>#}
+{#    {% endif %}#}
+{#    <label for="id_message">Message:</label>#}
+{#    {{ form.message }}#}
+{#</div>#}
+{#在校验失败的情况下, 这段代码会在包含错误字段的div的class属性中增加一个”errors”，在一个有序列表中显示错误信息。#}
