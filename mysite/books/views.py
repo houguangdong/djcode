@@ -2,13 +2,37 @@
 
 from django.shortcuts import render
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from models import Book
+import datetime
 # Create your views here.
 
 
-# def search_form(request):
-#     return render_to_response('book/search_form.html')
+def hello(request):
+    return HttpResponse("Hello world")
+
+def current_datetime(request):
+    now = datetime.datetime.now()
+    # 方式2
+    # render_to_response()的第一个参数必须是要使用的模板名称。
+    # 如果要给定第二个参数，那么该参数必须是为该模板创建Context时所使用的字典。
+    # 如果不提供第二个参数， render_to_response()使用一个空字典。
+    return render_to_response('current_datetime.html', {'current_date': now})
+
+def hours_ahead(request, offset):
+    try:
+        offset = int(offset)
+    except ValueError:
+        raise Http404
+    dt = datetime.datetime.now() + datetime.timedelta(hours=offset)
+    print dt
+    html = "<html><body>In % hour(s), it will be %s.</body></html>" % (offset, dt)
+    # assert False
+    return HttpResponse(html)
+
+
+def search_form(request):
+    return render_to_response('book/search_form.html')
 
 
 # def search1(request):

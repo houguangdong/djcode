@@ -19,21 +19,27 @@ def hello(request):
     return HttpResponse("Hello world")
 
 
+def current_datetime0(request):
+    # 方式1
+    now = datetime.datetime.now()
+    t = get_template('current_datetime.html')
+    html = t.render(Context({'current_date': now}))
+    return HttpResponse(html)
+
+
 def current_datetime(request):
     now = datetime.datetime.now()
-    # 方式1
-    # t = get_template('current_datetime.html')
-    # html = t.render(Context({'current_date': now}))
-    # return HttpResponse(html)
     # 方式2
-    # render_to_response()的第一个参数必须是要使用的模板名称。 如果要给定第二个参数，那么该参数必须是为该模板创建Context时所使用的字典。 如果不提供第二个参数， render_to_response()使用一个空字典。
+    # render_to_response()的第一个参数必须是要使用的模板名称。
+    # 如果要给定第二个参数，那么该参数必须是为该模板创建Context时所使用的字典。
+    # 如果不提供第二个参数， render_to_response()使用一个空字典。
     return render_to_response('current_datetime.html', {'current_date': now})
 
 
-# def current_datetime(request):
-#     # 方式3 使用 locals() 时要注意是它将包括 所有 的局部变量，它们可能比你想让模板访问的要多。
-#     current_date = datetime.datetime.now()
-#     return render_to_response('current_datetime.html', locals())
+def current_datetime1(request):
+    # 方式3 使用 locals() 时要注意是它将包括 所有 的局部变量，它们可能比你想让模板访问的要多。
+    current_date = datetime.datetime.now()
+    return render_to_response('current_datetime.html', locals())
 
 
 # 把模板存放于模板目录的子目录中是件很轻松的事情。 只需在调用 get_template() 时，把子目录名和一条斜杠添加到模板名称之前，如：
@@ -76,6 +82,7 @@ def hours_ahead(request, offset):
     except ValueError:
         raise Http404
     dt = datetime.datetime.now() + datetime.timedelta(hours=offset)
+    print dt
     html = "<html><body>In % hour(s), it will be %s.</body></html>" % (offset, dt)
     # assert False
     return HttpResponse(html)
@@ -169,8 +176,8 @@ def sell(item, price, quantity):
 
 
 def foobar_view(request, template_name):
-    # m_list = MyModel.objects.filter(is_new=True)
-    # return render_to_response(template_name, {'m_list': m_list})
+    m_list = MyModel.objects.filter(is_new=True)
+    return render_to_response(template_name, {'m_list': m_list})
     pass
 
 

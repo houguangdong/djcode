@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+# python manage.py makemigrations   # 生成建表sql
+# python manage.py  migrate  数据库创建表
 
 # Create your models here.
 class Publisher(models.Model):
@@ -24,7 +26,8 @@ class Author(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=40)
     email = models.EmailField(blank=True, verbose_name='e-mail')
-    # 但这不适用于ManyToManyField和ForeignKey字段，因为它们第一个参数必须是模块类。 那种情形，必须显式使用verbose_name这个参数名称。
+    # 但这不适用于ManyToManyField和ForeignKey字段，因为它们第一个参数必须是模块类。
+    # 那种情形，必须显式使用verbose_name这个参数名称。
     # email = models.EmailField(**'e-mail', **blank = True)
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
@@ -44,7 +47,8 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     authors = models.ManyToManyField(Author)
     publisher = models.ForeignKey(Publisher)
-    publication_date = models.DateField(blank=True, null=True)  # 如果 null=True, 表示数据库的该字段可以为空。，如果 blank=True，表示你的表单填写该字段的时候可以不填
+    publication_date = models.DateField(blank=True, null=True)  # 如果 null=True, 表示数据库的该字段可以为空。，
+                                                                # 如果 blank=True，表示你的表单填写该字段的时候可以不填
     # manage.py dbshell    ALTER TABLE books_book ALTER COLUMN publication_date DROP NOT NULL;
     num_pages = models.IntegerField(blank=True, null=True)
     objects1 = BookManager()
@@ -55,21 +59,21 @@ class Book(models.Model):
         return self.title
 
 
-# class MaleManager(models.Manager):
-#     def get_query_set(self):
-#         return super(MaleManager, self).get_query_set().filter(sex='M')
-#
-# class FemaleManager(models.Manager):
-#     def get_query_set(self):
-#         return super(FemaleManager, self).get_query_set().filter(sex='F')
-#
-# class Person(models.Model):
-#     first_name = models.CharField(max_length=50)
-#     last_name = models.CharField(max_length=50)
-#     sex = models.CharField(max_length=1, choices=(('M', 'Male'), ('F', 'Female')))
-#     people = models.Manager()
-#     men = MaleManager()
-#     women = FemaleManager()
+class MaleManager(models.Manager):
+    def get_query_set(self):
+        return super(MaleManager, self).get_query_set().filter(sex='M')
+
+class FemaleManager(models.Manager):
+    def get_query_set(self):
+        return super(FemaleManager, self).get_query_set().filter(sex='F')
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    sex = models.CharField(max_length=1, choices=(('M', 'Male'), ('F', 'Female')))
+    people = models.Manager()
+    men = MaleManager()
+    women = FemaleManager()
 
 # python manage.py shell
 # from books.models import Publisher
@@ -97,7 +101,7 @@ class Book(models.Model):
 # Publisher.objects.filter(name='Apress')
 # Publisher.objects.filter(country="U.S.A.", state_province="CA")
 
-# Publisher.objects.filter(name__contains="press")
+# Publisher.objects.filter(name__contains="press")e
 # SELECT id, name, address, city, state_province, country, website FROM books_publisher WHERE name LIKE '%press%';
 # 其他的一些查找类型有：icontains(大小写无关的LIKE),startswith和endswith, 还有range(SQLBETWEEN查询）。
 

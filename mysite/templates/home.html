@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <title>自强学堂</title>
+</head>
+<body>
+    <a href="/add/4/5/">计算 4+5</a><br>
+    {{ string }}
+    {% for i in TutorialList %}
+        {{ i }}
+    {% endfor %}
+    站点：{{ info_dict.site }} 内容：{{ info_dict.content }}
+    {% for key, value in info_dict.items %}
+        {{ key }}: {{ value }}
+    {% endfor %}
+
+    {% for item in List %}
+        {{ item }},
+    {% endfor %}
+
+
+    {#    我们会发现最后一个元素后面也有一个逗号，这样肯定不爽，如果判断是不是遍历到了最后一个元素了呢？#}
+    {#    用变量 forloop.last 这个变量，如果是最后一项其为真，否则为假，更改如下：#}
+    {% for item in List %}
+        {{ item }}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    {#    变量	描述#}
+    {#    forloop.counter	索引从 1 开始算#}
+    {#    forloop.counter0	索引从 0 开始算#}
+    {#    forloop.revcounter	索引从最大长度到 1#}
+    {#    forloop.revcounter0	索引从最大长度到 0#}
+    {#    forloop.first	当遍历的元素为第一项时为真#}
+    {#    forloop.last	当遍历的元素为最后一项时为真#}
+    {#    forloop.parentloop	#}
+    {#    用在嵌套的 for 循环中，#}
+    {#    #}
+    {#    获取上一层 for 循环的 forloop#}
+
+    {#    当列表中可能为空值时用 for  empty#}
+    {#    <ul>#}
+    {#    {% for athlete in athlete_list %}#}
+    {#        <li>{{ athlete.name }}</li>#}
+    {#    {% empty %}#}
+    {#        <li>抱歉，列表为空</li>#}
+    {#    {% endfor %}#}
+    {#    </ul>#}
+
+
+    {#    {% if var >= 90 %}#}
+    {#    成绩优秀，自强学堂你没少去吧！学得不错#}
+    {#    {% elif var >= 80 %}#}
+    {#    成绩良好#}
+    {#    {% elif var >= 70 %}#}
+    {#    成绩一般#}
+    {#    {% elif var >= 60 %}#}
+    {#    需要努力#}
+    {#    {% else %}#}
+    {#    不及格啊，大哥！多去自强学堂学习啊！#}
+    {#    {% endif %}#}
+
+    {#    {% if num <= 100 and num >= 0 %}#}
+    {#    num在0到100之间#}
+    {#    {% else %}#}
+    {#    数值不在范围之内！#}
+    {#    {% endif %}#}
+
+    {#    {% if 'ziqiangxuetang' in List %}#}
+    {#    自强学堂在名单中#}
+    {#    {% endif %}#}
+
+    {{ request.user }}
+    {#    如果登陆就显示内容，不登陆就不显示内容：#}
+    {% if request.user.is_authenticated %}
+        {{ request.user.username }}，您好！
+    {% else %}
+        请登陆，这里放登陆链接
+    {% endif %}
+
+    {#    获取当前网址：#}
+    {{ request.path }}
+
+    {#    获取当前 GET 参数#}
+    {{ request.GET.urlencode }}
+
+    {#     合并到一起用的一个例子：#}
+    <a href="{{ request.path }}?{{ request.GET.urlencode }}&delete=1">当前网址加参数 delete</a>
+    {#    比如我们可以判断 delete 参数是不是 1 来删除当前的页面内容。#}
+</body>
+</html>
+
+
+
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block title %}欢迎光临首页{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#{% include 'ad.html' %}#}
+{#这里是首页，欢迎光临#}
+{#{% endblock %}#}

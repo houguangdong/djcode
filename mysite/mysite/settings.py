@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'books',
+    'learn',
+    'people',
+    'blog'
 ]
 
 MIDDLEWARE = [
@@ -88,9 +91,9 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         # 'ENGINE': 'postgresql_psycopg2',
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mysql',
+        'NAME': 'dong',
         'USER': 'root',
-        'PASSWORD': 'donga123',
+        'PASSWORD': '123456',
         'HOST': 'localhost', # '/var/run/mysql'
         'PORT': '3306',
     }
@@ -134,3 +137,32 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+##############################################自定义####################
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "common_static"),
+    os.path.join(BASE_DIR, "static"),
+)
+# 把 jquery.js 放在 common_static/js/ 下，这样就可以 在 /static/js/jquery.js 中访问到它！
+
+# 自定义的模块
+# 开始之前我们修改一个 settings.py 让Django打印出在数据库中执行的语句
+# settings.py 尾部加上
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG' if DEBUG else 'INFO',
+#         },
+#     },
+# }
+# 这样当 DEBUG 为 True 的时候，我们可以看出 django 执行了什么 SQL 语句
