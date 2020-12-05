@@ -49,3 +49,48 @@ class Person(models.Model):
 # filter是找出满足条件的，当然也有排除符合某条件的
 # Person.objects.exclude(name__contains="WZ")  # 排除包含 WZ 的Person对象
 # Person.objects.filter(name__contains="abc").exclude(age=23)  # 找出名称含有abc, 但是排除年龄是23岁的
+
+
+class Order(models.Model):
+
+    orderid = models.CharField(max_length=64, unique=True)
+    desc = models.CharField(max_length=512)
+    product = models.CharField(max_length=512, null=True)
+    amount = models.IntegerField()
+    userid = models.CharField(max_length=512, null=True)
+    create_time = models.DateTimeField(db_index=True)
+
+
+# 1. F() ---- 专门取对象中某列值的操作
+from django.db.models import F
+order = Order.objects.get(orderid='123456789')
+order.amount = F('amount') - 1
+order.save()
+
+# 需要注意的是在使用上述方法更新过数据之后需要重新加载数据来使数据库中的值与程序中的值对应：
+# order= Order.objects.get(pk=order.pk)
+# 或者使用更加简单的方法：
+# order.refresh_from_db()
+
+# Q对象可以通过 &（与）、 |（或）、 ~（非）运算来组合生成不同的Q对象，便于在查询操作中灵活地运用。
+from django.db.models import Q
+
+# Order.objects.get(Q(desc__startswith='Who'), Q(create_time=date(2016, 10, 2)) | Q(create_time=date(2016, 10, 6)))
+# 转换成sql语句，大致如下：
+# SELECT * from core_order WHERE desc LIKE 'Who%' AND (create_time = '2016-10-02' OR create_time = '2016-10-06')
+# Q对象可以与关键字参数查询一起使用，不过一定要把Q对象放在关键字参数查询的前面。
+# 正确写法：
+# Order.objects.get( Q(create_time=date(2016, 10, 2)) | Q(create_time=date(2016, 10, 6)) desc__startswith='Who', )
+# 错误写法：
+# Order.objects.get( desc__startswith='Who', Q(create_time=date(2016, 10, 2)) | Q(create_time=date(2016, 10, 6)) )
+
+# 并且条件:与条件查询
+# models.User.objects.filter(条件1,条件2,条件n..)
+# models.User.objects.filter(Q(username='老王') & Q(userpass='admin'))
+
+# 或者条件:或条件
+# models.User.objects.fliter(Q(username='老王') | Q(username='老李'))
+
+# 取反条件
+# models.User.objects.filter(~Q(username='老王'))
+# models.User.objects.exclude(username='老王')

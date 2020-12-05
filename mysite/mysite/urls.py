@@ -33,9 +33,9 @@ urlpatterns = [
     url(r'^index$', learn_views.index),
     url(r'^index1$', learn_views.index1),
     url(r'^home/$', learn_views.home),
-    url(r'^add1/$', b_views.index, name='home'),                 # 注意修改了这一行
-    url(r'^add/$', learn_views.add, name='add'),        # 注意修改了这一行
-    url(r'^add/(\d+)/(\d+)/$', learn_views.add2, name='add2'),     # 注意修改了这一行
+    url(r'^add1/$', b_views.index, name='home'),                    # 注意修改了这一行
+    url(r'^add/$', learn_views.add, name='add'),                    # 注意修改了这一行
+    url(r'^add/(\d+)/(\d+)/$', learn_views.add2, name='add2'),      # 注意修改了这一行
     url(r'^admin/', admin.site.urls),
     url('^hello/$', hello),
     url('^time/$', current_datetime),

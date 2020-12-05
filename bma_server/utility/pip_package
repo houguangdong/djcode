@@ -1,0 +1,6 @@
+django==1.11.20
+django_rest_framework==3.9.2
+pymysql==0.9.3
+redis==3.2.1
+arrow==0.13.1
+elasticsearch==6.3.1
